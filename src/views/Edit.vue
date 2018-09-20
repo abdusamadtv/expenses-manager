@@ -2,7 +2,7 @@
     <form @submit.prevent>
         <div class="form-group">
             <label for="sum">Sum</label>
-            <input type="number" v-model="expense.sum" class="form-control" id="sum" placeholder="Expense sum">
+            <input type="number" v-model.number="expense.sum" class="form-control" id="sum" placeholder="Expense sum">
         </div>
         <div class="form-group">
             <label for="date">Date</label>

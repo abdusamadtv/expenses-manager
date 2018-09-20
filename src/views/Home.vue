@@ -40,6 +40,9 @@
         </div>
         <div class="row expenses">
             <div v-if="filteredExpenses.length" class="table-responsive">
+                <p>
+                    <span class="total-sum">Total sum:</span> ${{totalSum}}
+                </p>
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -85,6 +88,11 @@ export default {
     };
   },
   computed: {
+    totalSum() {
+      return this.filteredExpenses.reduce((accum, expense) => {
+        return accum + expense.sum;
+      }, 0);
+    },
     disabledDates() {
       return {
         to: new Date(this.$store.getters.oldestExpenseDate),
@@ -161,6 +169,10 @@ export default {
       }
     }
   }
+}
+
+.total-sum {
+  font-weight: 600;
 }
 
 @media (max-width: 480px) {

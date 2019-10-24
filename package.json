@@ -1,5 +1,5 @@
 {
-  "name": "expenses-manager-new",
+  "name": "expenses-manager",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,8 +9,10 @@
   },
   "dependencies": {
     "core-js": "^3.3.2",
+    "moment": "^2.24.0",
     "vue": "^2.6.10",
     "vue-router": "^3.1.3",
+    "vuejs-datepicker": "^1.6.2",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

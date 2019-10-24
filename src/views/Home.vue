@@ -1,82 +1,80 @@
 <template>
-    <div>
-        <div class="row header">
-            <div v-if="filteredExpenses.length" class="col-md-6 sort-block">
-                <div class="form-group row">
-                    <div class="col-md-12">
-                        <label for="sort-by" class="col-form-label form-title">Sort by:</label>
-                    </div>
-                    <div class="col">
-                        <select v-model="sortBy" id="sort-by" class="custom-select">
-                            <option v-for="(sortOption, index) in sortOptions" :key="index" :value="sortOption.value">
-                                {{sortOption.name}}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="col">
-                        <button @click="sortExpenses()" class="btn btn-info">{{sortOrder}}</button>
-                    </div>
-                </div>
-            </div>
-            <div v-if="filteredExpenses.length" class="col-md-6">
-                <div class="row">
-                    <div class="col">
-                        <p class="form-title">
-                            Date from:
-                        </p>
-                        <datepicker v-model="dateFrom" :disabledDates="disabledDates"></datepicker>
-                    </div>
-                    <div class="col">
-                        <p class="form-title">
-                            Date to:
-                        </p>
-                        <datepicker v-model="dateTo" :disabledDates="disabledDates"></datepicker>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12 add-block">
-                <router-link to="/add" class="btn btn-primary add-button">Add expense</router-link>
-            </div>
+  <div>
+    <div class="row header">
+      <div v-if="filteredExpenses.length" class="col-md-6 sort-block">
+        <div class="form-group row">
+          <div class="col-md-12">
+            <label for="sort-by" class="col-form-label form-title">Sort by:</label>
+          </div>
+          <div class="col">
+            <select id="sort-by" v-model="sortBy" class="custom-select">
+              <option v-for="(sortOption, index) in sortOptions" :key="index" :value="sortOption.value">
+                {{ sortOption.name }}
+              </option>
+            </select>
+          </div>
+          <div class="col">
+            <button class="btn btn-info" @click="sortExpenses()">{{ sortOrder }}</button>
+          </div>
         </div>
-        <div class="row expenses">
-            <div v-if="filteredExpenses.length" class="table-responsive">
-                <p>
-                    <span class="total-sum">Total sum:</span> ${{totalSum}}
-                </p>
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Sum</th>
-                            <th>Date</th>
-                            <th>Description</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(expense, index) in filteredExpenses" :key="index">
-                            <td>${{expense.sum}}</td>
-                            <td>{{formatDate(expense.date)}}</td>
-                            <td>{{expense.description}}</td>
-                            <td class="actions">
-                                <button @click="editExpense(expense.id)" class="btn btn-sm btn-warning edit-button">Edit</button>
-                                <button @click="deleteExpense(expense)" class="btn btn-sm btn-danger">Delete</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <p v-else>Sorry, but there are no expenses yet</p>
+      </div>
+      <div v-if="filteredExpenses.length" class="col-md-6">
+        <div class="row">
+          <div class="col">
+            <p class="form-title">
+              Date from:
+            </p>
+            <datepicker v-model="dateFrom" :disabled-dates="disabledDates"></datepicker>
+          </div>
+          <div class="col">
+            <p class="form-title">
+              Date to:
+            </p>
+            <datepicker v-model="dateTo" :disabled-dates="disabledDates"></datepicker>
+          </div>
         </div>
+      </div>
+      <div class="col-md-12 add-block">
+        <router-link to="/add" class="btn btn-primary add-button">Add expense</router-link>
+      </div>
     </div>
+    <div class="row expenses">
+      <div v-if="filteredExpenses.length" class="table-responsive">
+        <p><span class="total-sum">Total sum:</span> ${{ totalSum }}</p>
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Sum</th>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(expense, index) in filteredExpenses" :key="index">
+              <td>${{ expense.sum }}</td>
+              <td>{{ formatDate(expense.date) }}</td>
+              <td>{{ expense.description }}</td>
+              <td class="actions">
+                <button class="btn btn-sm btn-warning edit-button" @click="editExpense(expense.id)">Edit</button>
+                <button class="btn btn-sm btn-danger" @click="deleteExpense(expense)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p v-else>Sorry, but there are no expenses yet</p>
+    </div>
+  </div>
 </template>
 
 <script>
-import moment from 'moment';
-import Datepicker from 'vuejs-datepicker';
+import moment from 'moment'
+import Datepicker from 'vuejs-datepicker'
 export default {
   name: 'Home',
   components: {
-    Datepicker
+    Datepicker,
   },
   data() {
     return {
@@ -84,55 +82,55 @@ export default {
       sortBy: 'sum',
       sortOptions: [{ name: 'Date', value: 'date' }, { name: 'Sum', value: 'sum' }],
       dateFrom: new Date(this.$store.getters.oldestExpenseDate),
-      dateTo: new Date(this.$store.getters.newestExpenseDate)
-    };
+      dateTo: new Date(this.$store.getters.newestExpenseDate),
+    }
   },
   computed: {
     totalSum() {
       return this.filteredExpenses.reduce((accum, expense) => {
-        return accum + expense.sum;
-      }, 0);
+        return accum + expense.sum
+      }, 0)
     },
     disabledDates() {
       return {
         to: new Date(this.$store.getters.oldestExpenseDate),
-        from: new Date(this.$store.getters.newestExpenseDate)
-      };
+        from: new Date(this.$store.getters.newestExpenseDate),
+      }
     },
     filteredExpenses() {
-      let minDate = this.dateFrom;
-      let maxDate = this.dateTo;
-      return this.expenses.filter(expense => expense.date >= minDate && expense.date <= maxDate);
+      let minDate = this.dateFrom
+      let maxDate = this.dateTo
+      return this.expenses.filter(expense => expense.date >= minDate && expense.date <= maxDate)
     },
     expenses() {
-      return this.$store.state.expenses;
-    }
+      return this.$store.state.expenses
+    },
   },
   watch: {
     sortBy() {
-      this.sortExpenses();
-    }
+      this.sortExpenses()
+    },
   },
   methods: {
     sortExpenses() {
-      this.sortOrder = this.sortOrder === 'Ascending' ? 'Descending' : 'Ascending';
+      this.sortOrder = this.sortOrder === 'Ascending' ? 'Descending' : 'Ascending'
       return this.filteredExpenses.sort((curr, prev) => {
         return this.sortOrder === 'Ascending'
           ? curr[this.sortBy] - prev[this.sortBy]
-          : prev[this.sortBy] - curr[this.sortBy];
-      });
+          : prev[this.sortBy] - curr[this.sortBy]
+      })
     },
     formatDate(date) {
-      return moment(date).format('D MMMM, YYYY');
+      return moment(date).format('D MMMM, YYYY')
     },
     editExpense(id) {
-      this.$router.push({ name: 'edit', params: { id: id } });
+      this.$router.push({ name: 'edit', params: { id: id } })
     },
     deleteExpense(expense) {
-      this.$store.commit('delete', expense);
-    }
-  }
-};
+      this.$store.commit('delete', expense)
+    },
+  },
+}
 </script>
 
 <style lang="scss">

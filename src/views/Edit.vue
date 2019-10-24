@@ -27,12 +27,12 @@ export default {
   computed: {
     expense() {
       let id = this.$route.params.id
-      return this.$store.getters.getExpense(id)
+      return this.$store.getters.expense(id)
     },
   },
   methods: {
     editExpense() {
-      this.$store.commit('edit', this.expense)
+      this.$store.commit('editExpense', this.expense)
       this.$router.push({ name: 'home' })
     },
   },

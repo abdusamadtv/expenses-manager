@@ -37,7 +37,7 @@ export default {
     addExpense() {
       let expense = this.expense
       expense.date = expense.date.setHours(0, 0, 0, 0)
-      this.$store.commit('add', expense)
+      this.$store.dispatch('addExpense', expense)
       this.$router.push({ name: 'home' })
     },
   },

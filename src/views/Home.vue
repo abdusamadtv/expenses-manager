@@ -82,7 +82,7 @@ export default {
       sortBy: 'sum',
       sortOptions: [{ name: 'Date', value: 'date' }, { name: 'Sum', value: 'sum' }],
       dateFrom: new Date(this.$store.getters.oldestExpenseDate),
-      dateTo: new Date(this.$store.getters.newestExpenseDate),
+      dateTo: new Date(this.$store.getters.latestExpenseDate),
     }
   },
   computed: {
@@ -94,7 +94,7 @@ export default {
     disabledDates() {
       return {
         to: new Date(this.$store.getters.oldestExpenseDate),
-        from: new Date(this.$store.getters.newestExpenseDate),
+        from: new Date(this.$store.getters.latestExpenseDate),
       }
     },
     filteredExpenses() {
@@ -127,7 +127,7 @@ export default {
       this.$router.push({ name: 'edit', params: { id: id } })
     },
     deleteExpense(expense) {
-      this.$store.commit('delete', expense)
+      this.$store.commit('deleteExpense', expense)
     },
   },
 }
